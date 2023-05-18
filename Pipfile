@@ -1,0 +1,20 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+beautifulsoup4 = "*"
+requests = "*"
+soupsieve = "*"
+lxml = "*"
+scrapy = "*"
+selectorlib = "*"
+fastapi = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+nltk = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"

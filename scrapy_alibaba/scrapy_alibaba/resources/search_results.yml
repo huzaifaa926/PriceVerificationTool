@@ -1,0 +1,20 @@
+products:
+    css: 'div[data-content="abox-ProductNormalList"]'
+    multiple: true
+    type: Text
+    children:
+        name:
+            css: a.elements-title-normal
+            type: Text
+            attribute: title
+        price:
+            css: 'p.elements-offer-price-normal span'
+            type: Text
+        # image:
+        #     css: 'a.organic-gallery-offer__img-section img'
+        #     type: Attribute
+        #     attribute: src
+        link:
+            css: a.elements-title-normal
+            type: Link
+            attriubte: href
