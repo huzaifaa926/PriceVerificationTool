@@ -13,6 +13,10 @@ selectorlib = "*"
 fastapi = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 nltk = "*"
+scikit-learn = "*"
+scipy = "*"
+matplotlib = "*"
+sentence-transformers = "*"
 
 [dev-packages]
 
