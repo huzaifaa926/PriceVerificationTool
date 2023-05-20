@@ -17,6 +17,8 @@ scikit-learn = "*"
 scipy = "*"
 matplotlib = "*"
 sentence-transformers = "*"
+thefuzz = "*"
+python-levenshtein = "*"
 
 [dev-packages]
 
