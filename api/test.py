@@ -18,9 +18,8 @@ s = ["Mobile Phone", "Cellphone", "Phone", "IPhone", "Samsung"]
 print(process.extract("phone", s, scorer=fuzz.token_set_ratio))
 
 
-
-
-
+# descs = [item["goods_desc"] for item in data]
+# output = process.extractWithoutOrder(query.goods_desc, descs, scorer=fuzz.token_set_ratio, score_cutoff=query.threshold)
 
 
 
