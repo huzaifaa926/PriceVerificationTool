@@ -19,6 +19,7 @@ matplotlib = "*"
 sentence-transformers = "*"
 thefuzz = "*"
 python-levenshtein = "*"
+selenium = "*"
 
 [dev-packages]
 
