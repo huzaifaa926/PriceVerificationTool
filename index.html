@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Price Verification Tool</title>
+  <style>
+    /* Add your custom CSS styles here */
+  </style>
+</head>
+<body>
+  <h1>Price Verification Tool</h1>
+
+  <form id="apiForm">
+    <label for="goods_desc">Goods Description:</label>
+    <input type="text" id="goods_desc" required><br>
+
+    <label for="uom">UOM:</label>
+    <input type="text" id="uom" required><br>
+
+    <label for="currency">Currency:</label>
+    <input type="text" id="currency" required><br>
+
+    <label for="price">Price:</label>
+    <input type="number" id="price" step="0.01" required><br>
+
+    <label for="algo">Algorithm:</label>
+    <select id="algo">
+      <option value="fuzz.ratio">fuzz.ratio</option>
+      <option value="fuzz.partial_ratio">fuzz.partial_ratio</option>
+      <option value="fuzz.token_sort_ratio">fuzz.token_sort_ratio</option>
+      <option value="fuzz.token_set_ratio" selected="selected">fuzz.token_set_ratio</option>
+    </select><br>
+
+    <label for="threshold">Threshold:</label>
+    <input type="number" id="threshold" min="50" max="100" value="50"><br>
+
+    <button type="submit">Submit</button>
+  </form>
+
+  <p id="loadingMessage" style="display: none;">Please wait. Sending API request...</p>
+
+  <div id="resultTable" style="display: none;">
+    <h2>Search Results</h2>
+    <table border='1' style='border-collapse:collapse' id="results">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Price</th>
+          <th>Currency</th>
+          <th>UOM</th>
+          <th>Over/Under</th>
+          <th>Link</th>
+        </tr>
+      </thead>
+      <tbody id="resultBody">
+        <!-- Result rows will be dynamically added here -->
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    
+    document.getElementById("apiForm").addEventListener("submit", function(event) {
+      event.preventDefault();
+      submitForm();
+    });
+
+    function submitForm() {
+      // Disable the form while sending the API request
+      disableForm();
+
+      // Show loading message
+      showLoadingMessage();
+
+      // Get form input values
+      var goodsDesc = document.getElementById("goods_desc").value;
+      var uom = document.getElementById("uom").value;
+      var currency = document.getElementById("currency").value;
+      var price = parseFloat(document.getElementById("price").value);
+      var algo = document.getElementById("algo").value;
+      var threshold = parseInt(document.getElementById("threshold").value);
+
+      // Construct the request body
+      var requestBody = {
+        goods_desc: goodsDesc,
+        uom: uom,
+        currency: currency,
+        price: price,
+        algo: algo,
+        threshold: threshold
+      };
+
+      // Send the API request
+      fetch("http://127.0.0.1:8000/pvt/api/v2/search", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(requestBody)
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Process the API response and display the results
+        displayResults(data);
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        // Display an error message
+        displayErrorMessage();
+      });
+    }
+
+    function disableForm() {
+      var form = document.getElementById("apiForm");
+      var elements = form.elements;
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].disabled = true;
+      }
+    }
+
+    function showLoadingMessage() {
+      document.getElementById("loadingMessage").style.display = "block";
+    }
+
+    function displayResults(response) {
+  var results = response.output;
+  var resultBody = document.getElementById("resultBody");
+  resultBody.innerHTML = "";
+
+  if (results.length > 0) {
+    // Display the result table
+    document.getElementById("resultTable").style.display = "block";
+
+    // Add result rows to the table
+    results.forEach(function(result) {
+      var row = document.createElement("tr");
+
+      var titleCell = document.createElement("td");
+      titleCell.textContent = result.title;
+      row.appendChild(titleCell);
+
+      var priceCell = document.createElement("td");
+      priceCell.textContent = result.price;
+      row.appendChild(priceCell);
+
+      var currencyCell = document.createElement("td");
+      currencyCell.textContent = result.currency;
+      row.appendChild(currencyCell);
+
+      var uomCell = document.createElement("td");
+      uomCell.textContent = Array.isArray(result.uom) ? result.uom.join(", ") : "N/A";
+      row.appendChild(uomCell);
+
+      var overUnderCell = document.createElement("td");
+      overUnderCell.textContent = result["Over/Under"];
+      row.appendChild(overUnderCell);
+
+      var linkCell = document.createElement("td");
+      var link = document.createElement("a");
+      link.href = result.link;
+      link.textContent = "Link";
+      linkCell.appendChild(link);
+      row.appendChild(linkCell);
+
+      resultBody.appendChild(row);
+    });
+  } else {
+    // Display "No matches found" message
+    var noMatchesRow = document.createElement("tr");
+    var noMatchesCell = document.createElement("td");
+    noMatchesCell.setAttribute("colspan", "6");
+    noMatchesCell.textContent = "No matches found";
+    noMatchesRow.appendChild(noMatchesCell);
+    resultBody.appendChild(noMatchesRow);
+
+    // Hide the result table
+    document.getElementById("resultTable").style.display = "none";
+  }
+
+  // Re-enable the form
+  enableForm();
+}
+
+
+    function displayErrorMessage() {
+      // Display error message
+      var errorMessage = document.createElement("p");
+      errorMessage.textContent = "An error occurred while processing the request.";
+      document.body.appendChild(errorMessage);
+
+      // Re-enable the form
+      enableForm();
+    }
+
+    function enableForm() {
+      var form = document.getElementById("apiForm");
+      var elements = form.elements;
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].disabled = false;
+      }
+
+      // Hide loading message
+      document.getElementById("loadingMessage").style.display = "none";
+    }
+  </script>
+</body>
+</html>
