@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.parse
 import re
+from decimal import Decimal
 
 LIMIT = 10
 options = Options()
@@ -46,15 +47,14 @@ def scrap(keyword):
                 match = re.search(r'\d+(?:,\d+)?(?:\.\d+)?', price)
                 if match:
                     value = match.group()
+                    price = Decimal(re.sub(r'[^\d.]', '', value))
             if quality:
                 quality = quality[0].text.strip()
             if UoM:
                 UoM = UoM[0].text.strip()
             
-            temp['title'] = title
-            
-            
-            temp['price'] = float(value)
+            temp['title'] = title         
+            temp['price'] = float(price)
             temp['link'] = link
             temp['quality'] = quality
             temp['uom'] = UoM
