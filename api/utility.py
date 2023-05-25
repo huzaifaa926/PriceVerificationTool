@@ -32,9 +32,8 @@ def load_scrapped_data():
             temp['title'] = row[0]
             temp['price'] = row[1]
             temp['currency'] = row[2]
-            temp['quality'] = row[3]
-            temp['uom'] = row[4]
-            temp['link'] = row[5]
+            temp['uom'] = row[3]
+            temp['link'] = row[4]
             data.append(temp)
     return data
 
@@ -52,7 +51,7 @@ def get_currency_rate():
 
 def store_output(query, product_data):
     header = ['title', 'price', 'currency',
-              'quality', 'uom', 'link', 'query', 'date']
+              'uom', 'link', 'query', 'date']
 
     file_exists = os.path.exists('../resources/ScrappedData.csv')
     with open('../resources/ScrappedData.csv', mode='a', newline='') as file:
@@ -62,7 +61,7 @@ def store_output(query, product_data):
             writer.writerow(header)
         for product in product_data:
             writer.writerow([product['title'], product['price'], product['currency'],
-                             product['quality'], product['uom'], product['link'],
+                             product['uom'], product['link'],
                              query, date.today().strftime("%Y-%m-%d")])
 
 
@@ -72,7 +71,7 @@ def already_scrapped(query):
     with open('../resources/ScrappedData.csv', 'r') as file:
         csv_reader = csv.reader(file)
         for row in csv_reader:
-            if fuzz.token_set_ratio(query, row[6]) >= 85:
+            if fuzz.token_set_ratio(query, row[5]) >= 85:
                 return True
     return False
 

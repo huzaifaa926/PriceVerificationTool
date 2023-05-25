@@ -17,6 +17,40 @@ def normalize_url(url):
     return url.lstrip('/')
 
 
+def clean_title(title):
+    try:
+        title = title.text.strip()
+    except Exception as e:
+        print(e)
+        title = None
+    return title
+
+def clean_price_uom(price_html):
+    # price_html = BeautifulSoup(price_html, 'lxml')
+    # Handles cases where there are multiple prices available for a product
+    try:
+        price = price_html.find_all('div', class_='price-item')[0].find('div', class_='price').text.strip()
+        uom = price_html.find_all('div', class_='price-item')[0].find('div', class_='quality').text.strip()
+
+        price = float(re.sub(r'[^(\d.)]', '', price))
+        uom = re.sub(r'[\d\W_]+', '', uom)
+        return price, uom
+    except Exception as e:
+        print(e)
+
+    # Handles cases where there is a price range available for a product
+    try:
+        price = price_html.find('div', class_='price-range').find('span', class_='price').text.strip()
+        uom = price_html.find('div', class_='price-range').find('span', class_='unit').text.strip()
+
+        price = float(Decimal(re.search(r'\$(\d+\.\d+)', price).group(1)))
+        uom = re.sub(r'[\d\W_]+', '', uom)
+        return price, uom
+    except Exception as e:
+        print(e)
+    
+    return None, None
+
 def scrap(keyword):
     keyword = urllib.parse.quote(keyword)
     driver = webdriver.Chrome(options=options)
@@ -27,6 +61,7 @@ def scrap(keyword):
     soup = BeautifulSoup(html, 'lxml')
     product_lists = soup.find('div', {'class': 'app-organic-search__list'}).findChildren("div" , recursive=False)
     data = []
+    print(len(product_lists))
     for product in product_lists[:LIMIT]:
         temp = {}
         if product.find('h2'):
@@ -36,30 +71,21 @@ def scrap(keyword):
             response=requests.get(link, headers=headers)
             soup=BeautifulSoup(response.text,'lxml')
             title = soup.find('div', {'class':'product-title'})
-            price = soup.find('div', {'class':'product-price'}).find_all(class_='price')
-            quality = soup.find('div', {'class':'product-price'}).find_all(class_='quality')
-            UoM = soup.find('div', {'class':'product-price'}).find_all(class_='unit')
-
-            if title:
-                title = title.text.strip()
-            if price:
-                price = price[0].text.strip()
-                match = re.search(r'\d+(?:,\d+)?(?:\.\d+)?', price)
-                if match:
-                    value = match.group()
-                    price = Decimal(re.sub(r'[^\d.]', '', value))
-            if quality:
-                quality = quality[0].text.strip()
-            if UoM:
-                UoM = UoM[0].text.strip()
+            price_html = soup.find('div', {'class':'product-price'})
             
-            temp['title'] = title         
-            temp['price'] = float(price)
+            print(link)
+            temp['title'] = clean_title(title)
+            temp['price'], temp['uom'] = clean_price_uom(price_html)
             temp['link'] = link
-            temp['quality'] = quality
-            temp['uom'] = UoM
             temp['currency'] = "USD"
 
             data.append(temp)
             
     return data
+
+
+scrap("ball bearings")
+# clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">50 - 499 pieces</div><div class="price"><span class="promotion">$20.00</span></div></div><div class="price-item"><div class="quality">500 - 1999 pieces</div><div class="price"><span class="">$18.00</span></div></div><div class="price-item"><div class="quality">&gt;= 2000 pieces</div><div class="price"><span class="">$15.00</span></div></div></div></div>')
+# clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">50 - 299 pieces</div><div class="price"><span class="promotion">$18.90</span></div></div><div class="price-item"><div class="quality">300 - 499 pieces</div><div class="price"><span class="">$16.90</span></div></div><div class="price-item"><div class="quality">&gt;= 500 pieces</div><div class="price"><span class="">$12.90</span></div></div></div></div>')
+# clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-range"><span class="price">$0.24 - $0.80</span><span class="unit">/ piece |</span><span class="moq">200 piece/pieces</span><span class="name">(Min. order)</span></div></div></div>')
+# clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">1 - 4 sets</div><div class="price"><span class="promotion">$14,500.00</span></div></div><div class="price-item"><div class="quality">5 - 9 sets</div><div class="price"><span class="">$14,000.00</span></div></div><div class="price-item"><div class="quality">10 - 99 sets</div><div class="price"><span class="">$13,700.00</span></div></div><div class="price-item"><div class="quality">&gt;= 100 sets</div><div class="price"><span class="">$6,800.00</span></div></div></div></div>')
