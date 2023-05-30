@@ -9,7 +9,9 @@ from decimal import Decimal
 
 LIMIT = 20
 options = Options()
-options.add_argument("--headless")
+# options.add_argument("--headless")
+options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+
 
 def normalize_url(url):
     if url.startswith('//'):
@@ -54,14 +56,17 @@ def clean_price_uom(price_html):
 def scrap(keyword):
     keyword = urllib.parse.quote(keyword)
     driver = webdriver.Chrome(options=options)
-    driver.get(f"https://www.alibaba.com/trade/search?fsb=y&IndexArea=product_en&CatId=&SearchText={keyword}&viewtype=G&page=1")
+    # driver.get(f"https://www.globalsources.com/searchList/products?fsb=y&IndexArea=product_en&CatId&keyWord={keyword}&viewtype=G&page=1")
+    driver.get(f'https://www.made-in-china.com/productdirectory.do?subaction=hunt&style=b&mode=and&code=0&comProvince=nolimit&order=0&isOpenCorrection=1&org=top&keyword=&file=&searchType=0&word={keyword}')
     html = driver.page_source
     driver.close()
 
     soup = BeautifulSoup(html, 'lxml')
-    product_lists = soup.find('div', {'class': 'app-organic-search__list'}).findChildren("div" , recursive=False)
+    print(soup)
+    product_lists = soup.find('ul', {'class': 'product-list'}).findChildren("li" , recursive=False)
     data = []
     for product in product_lists[:LIMIT]:
+        print(product)
         temp = {}
         if product.find('h2'):
             link = product.find('h2').find('a')['href']
@@ -83,7 +88,7 @@ def scrap(keyword):
     return data
 
 
-# scrap("ball bearings")
+scrap("ball bearings")
 # clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">50 - 499 pieces</div><div class="price"><span class="promotion">$20.00</span></div></div><div class="price-item"><div class="quality">500 - 1999 pieces</div><div class="price"><span class="">$18.00</span></div></div><div class="price-item"><div class="quality">&gt;= 2000 pieces</div><div class="price"><span class="">$15.00</span></div></div></div></div>')
 # clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">50 - 299 pieces</div><div class="price"><span class="promotion">$18.90</span></div></div><div class="price-item"><div class="quality">300 - 499 pieces</div><div class="price"><span class="">$16.90</span></div></div><div class="price-item"><div class="quality">&gt;= 500 pieces</div><div class="price"><span class="">$12.90</span></div></div></div></div>')
 # clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-range"><span class="price">$0.24 - $0.80</span><span class="unit">/ piece |</span><span class="moq">200 piece/pieces</span><span class="name">(Min. order)</span></div></div></div>')
