@@ -80,10 +80,10 @@ def calculate_over_under(currency_rate, org_price, org_currency, price, currency
     if org_currency != currency:
         price = currency_rate[currency] * price
 
-    if org_price <= price:
-        return "Under"
+    if org_price > price:
+        return f"Under by {round(abs((1 - (price/org_price))*100), 2)}%"
     else:
-        return "Over"
+        return f"Over by {round(abs((1 - (price/org_price))*100), 2)}%"
 
 
 # fuzz.ratio

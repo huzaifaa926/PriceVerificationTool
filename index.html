@@ -1,72 +1,273 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Price Verification Tool</title>
-  <style>
-    /* Add your custom CSS styles here */
-  </style>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous" />
 </head>
+
 <body>
-  <h1>Price Verification Tool</h1>
+  <br />
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <h2 class="display-6">Price Verification Tool</h2><br>
 
-  <form id="apiForm">
-    <label for="goods_desc">Goods Description:</label>
-    <input type="text" id="goods_desc" required><br>
+        <form id="apiForm" class="form-horizontal">
 
-    <label for="uom">UOM:</label>
-    <input type="text" id="uom" required><br>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-right" for="goods_desc">Goods Description</label>
+            <div class="col-sm-4">
+              <input type="text" id="goods_desc" required class="form-control" placeholder="Enter goods description" />
+            </div>
+          </div>
+          <br>
 
-    <label for="currency">Currency:</label>
-    <input type="text" id="currency" required><br>
 
-    <label for="price">Price:</label>
-    <input type="number" id="price" step="1" required><br>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-right" for="uom">Unit of Measurement</label>
+            <div class="col-sm-4">
+              <input type="text" id="uom" required class="form-control" placeholder="Enter unit of measurement" />
+            </div>
+          </div>
+          <br>
 
-    <div hidden="true">
-      <label for="algo">Algorithm:</label>
-      <select id="algo">
-        <option value="fuzz.ratio">fuzz.ratio</option>
-        <option value="fuzz.partial_ratio">fuzz.partial_ratio</option>
-        <option value="fuzz.token_sort_ratio">fuzz.token_sort_ratio</option>
-        <option value="fuzz.token_set_ratio" selected="selected">fuzz.token_set_ratio</option>
-      </select><br>
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-right" for="currency">Currency</label>
+            <div class="col-sm-4">
+              <select class="form-select" id="currency" name="currency" value="">
+                <option value="AFN">AFN - Afghan Afghani</option>
+                <option value="ALL">ALL - Albanian Lek</option>
+                <option value="DZD">DZD - Algerian Dinar</option>
+                <option value="AOA">AOA - Angolan Kwanza</option>
+                <option value="ARS">ARS - Argentine Peso</option>
+                <option value="AMD">AMD - Armenian Dram</option>
+                <option value="AWG">AWG - Aruban Florin</option>
+                <option value="AUD">AUD - Australian Dollar</option>
+                <option value="AZN">AZN - Azerbaijani Manat</option>
+                <option value="BSD">BSD - Bahamian Dollar</option>
+                <option value="BHD">BHD - Bahraini Dinar</option>
+                <option value="BDT">BDT - Bangladeshi Taka</option>
+                <option value="BBD">BBD - Barbadian Dollar</option>
+                <option value="BYR">BYR - Belarusian Ruble</option>
+                <option value="BEF">BEF - Belgian Franc</option>
+                <option value="BZD">BZD - Belize Dollar</option>
+                <option value="BMD">BMD - Bermudan Dollar</option>
+                <option value="BTN">BTN - Bhutanese Ngultrum</option>
+                <option value="BTC">BTC - Bitcoin</option>
+                <option value="BOB">BOB - Bolivian Boliviano</option>
+                <option value="BAM">BAM - Bosnia-Herzegovina Convertible Mark</option>
+                <option value="BWP">BWP - Botswanan Pula</option>
+                <option value="BRL">BRL - Brazilian Real</option>
+                <option value="GBP">GBP - British Pound Sterling</option>
+                <option value="BND">BND - Brunei Dollar</option>
+                <option value="BGN">BGN - Bulgarian Lev</option>
+                <option value="BIF">BIF - Burundian Franc</option>
+                <option value="KHR">KHR - Cambodian Riel</option>
+                <option value="CAD">CAD - Canadian Dollar</option>
+                <option value="CVE">CVE - Cape Verdean Escudo</option>
+                <option value="KYD">KYD - Cayman Islands Dollar</option>
+                <option value="XOF">XOF - CFA Franc BCEAO</option>
+                <option value="XAF">XAF - CFA Franc BEAC</option>
+                <option value="XPF">XPF - CFP Franc</option>
+                <option value="CLP">CLP - Chilean Peso</option>
+                <option value="CNY">CNY - Chinese Yuan</option>
+                <option value="COP">COP - Colombian Peso</option>
+                <option value="KMF">KMF - Comorian Franc</option>
+                <option value="CDF">CDF - Congolese Franc</option>
+                <option value="CRC">CRC - Costa Rican ColÃ³n</option>
+                <option value="HRK">HRK - Croatian Kuna</option>
+                <option value="CUC">CUC - Cuban Convertible Peso</option>
+                <option value="CZK">CZK - Czech Republic Koruna</option>
+                <option value="DKK">DKK - Danish Krone</option>
+                <option value="DJF">DJF - Djiboutian Franc</option>
+                <option value="DOP">DOP - Dominican Peso</option>
+                <option value="XCD">XCD - East Caribbean Dollar</option>
+                <option value="EGP">EGP - Egyptian Pound</option>
+                <option value="ERN">ERN - Eritrean Nakfa</option>
+                <option value="EEK">EEK - Estonian Kroon</option>
+                <option value="ETB">ETB - Ethiopian Birr</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="FKP">FKP - Falkland Islands Pound</option>
+                <option value="FJD">FJD - Fijian Dollar</option>
+                <option value="GMD">GMD - Gambian Dalasi</option>
+                <option value="GEL">GEL - Georgian Lari</option>
+                <option value="DEM">DEM - German Mark</option>
+                <option value="GHS">GHS - Ghanaian Cedi</option>
+                <option value="GIP">GIP - Gibraltar Pound</option>
+                <option value="GRD">GRD - Greek Drachma</option>
+                <option value="GTQ">GTQ - Guatemalan Quetzal</option>
+                <option value="GNF">GNF - Guinean Franc</option>
+                <option value="GYD">GYD - Guyanaese Dollar</option>
+                <option value="HTG">HTG - Haitian Gourde</option>
+                <option value="HNL">HNL - Honduran Lempira</option>
+                <option value="HKD">HKD - Hong Kong Dollar</option>
+                <option value="HUF">HUF - Hungarian Forint</option>
+                <option value="ISK">ISK - Icelandic KrÃ³na</option>
+                <option value="INR">INR - Indian Rupee</option>
+                <option value="IDR">IDR - Indonesian Rupiah</option>
+                <option value="IRR">IRR - Iranian Rial</option>
+                <option value="IQD">IQD - Iraqi Dinar</option>
+                <option value="ILS">ILS - Israeli New Sheqel</option>
+                <option value="ITL">ITL - Italian Lira</option>
+                <option value="JMD">JMD - Jamaican Dollar</option>
+                <option value="JPY">JPY - Japanese Yen</option>
+                <option value="JOD">JOD - Jordanian Dinar</option>
+                <option value="KZT">KZT - Kazakhstani Tenge</option>
+                <option value="KES">KES - Kenyan Shilling</option>
+                <option value="KWD">KWD - Kuwaiti Dinar</option>
+                <option value="KGS">KGS - Kyrgystani Som</option>
+                <option value="LAK">LAK - Laotian Kip</option>
+                <option value="LVL">LVL - Latvian Lats</option>
+                <option value="LBP">LBP - Lebanese Pound</option>
+                <option value="LSL">LSL - Lesotho Loti</option>
+                <option value="LRD">LRD - Liberian Dollar</option>
+                <option value="LYD">LYD - Libyan Dinar</option>
+                <option value="LTL">LTL - Lithuanian Litas</option>
+                <option value="MOP">MOP - Macanese Pataca</option>
+                <option value="MKD">MKD - Macedonian Denar</option>
+                <option value="MGA">MGA - Malagasy Ariary</option>
+                <option value="MWK">MWK - Malawian Kwacha</option>
+                <option value="MYR">MYR - Malaysian Ringgit</option>
+                <option value="MVR">MVR - Maldivian Rufiyaa</option>
+                <option value="MRO">MRO - Mauritanian Ouguiya</option>
+                <option value="MUR">MUR - Mauritian Rupee</option>
+                <option value="MXN">MXN - Mexican Peso</option>
+                <option value="MDL">MDL - Moldovan Leu</option>
+                <option value="MNT">MNT - Mongolian Tugrik</option>
+                <option value="MAD">MAD - Moroccan Dirham</option>
+                <option value="MZM">MZM - Mozambican Metical</option>
+                <option value="MMK">MMK - Myanmar Kyat</option>
+                <option value="NAD">NAD - Namibian Dollar</option>
+                <option value="NPR">NPR - Nepalese Rupee</option>
+                <option value="ANG">ANG - Netherlands Antillean Guilder</option>
+                <option value="TWD">TWD - New Taiwan Dollar</option>
+                <option value="NZD">NZD - New Zealand Dollar</option>
+                <option value="NIO">NIO - Nicaraguan CÃ³rdoba</option>
+                <option value="NGN">NGN - Nigerian Naira</option>
+                <option value="KPW">KPW - North Korean Won</option>
+                <option value="NOK">NOK - Norwegian Krone</option>
+                <option value="OMR">OMR - Omani Rial</option>
+                <option value="PKR" selected>PKR - Pakistani Rupee</option>
+                <option value="PAB">PAB - Panamanian Balboa</option>
+                <option value="PGK">PGK - Papua New Guinean Kina</option>
+                <option value="PYG">PYG - Paraguayan Guarani</option>
+                <option value="PEN">PEN - Peruvian Nuevo Sol</option>
+                <option value="PHP">PHP - Philippine Peso</option>
+                <option value="PLN">PLN - Polish Zloty</option>
+                <option value="QAR">QAR - Qatari Rial</option>
+                <option value="RON">RON - Romanian Leu</option>
+                <option value="RUB">RUB - Russian Ruble</option>
+                <option value="RWF">RWF - Rwandan Franc</option>
+                <option value="SVC">SVC - Salvadoran ColÃ³n</option>
+                <option value="WST">WST - Samoan Tala</option>
+                <option value="SAR">SAR - Saudi Riyal</option>
+                <option value="RSD">RSD - Serbian Dinar</option>
+                <option value="SCR">SCR - Seychellois Rupee</option>
+                <option value="SLL">SLL - Sierra Leonean Leone</option>
+                <option value="SGD">SGD - Singapore Dollar</option>
+                <option value="SKK">SKK - Slovak Koruna</option>
+                <option value="SBD">SBD - Solomon Islands Dollar</option>
+                <option value="SOS">SOS - Somali Shilling</option>
+                <option value="ZAR">ZAR - South African Rand</option>
+                <option value="KRW">KRW - South Korean Won</option>
+                <option value="XDR">XDR - Special Drawing Rights</option>
+                <option value="LKR">LKR - Sri Lankan Rupee</option>
+                <option value="SHP">SHP - St. Helena Pound</option>
+                <option value="SDG">SDG - Sudanese Pound</option>
+                <option value="SRD">SRD - Surinamese Dollar</option>
+                <option value="SZL">SZL - Swazi Lilangeni</option>
+                <option value="SEK">SEK - Swedish Krona</option>
+                <option value="CHF">CHF - Swiss Franc</option>
+                <option value="SYP">SYP - Syrian Pound</option>
+                <option value="STD">STD - São Tomé and Príncipe Dobra</option>
+                <option value="TJS">TJS - Tajikistani Somoni</option>
+                <option value="TZS">TZS - Tanzanian Shilling</option>
+                <option value="THB">THB - Thai Baht</option>
+                <option value="TOP">TOP - Tongan pa'anga</option>
+                <option value="TTD">TTD - Trinidad & Tobago Dollar</option>
+                <option value="TND">TND - Tunisian Dinar</option>
+                <option value="TRY">TRY - Turkish Lira</option>
+                <option value="TMT">TMT - Turkmenistani Manat</option>
+                <option value="UGX">UGX - Ugandan Shilling</option>
+                <option value="UAH">UAH - Ukrainian Hryvnia</option>
+                <option value="AED">AED - United Arab Emirates Dirham</option>
+                <option value="UYU">UYU - Uruguayan Peso</option>
+                <option value="USD">USD - US Dollar</option>
+                <option value="UZS">UZS - Uzbekistan Som</option>
+                <option value="VUV">VUV - Vanuatu Vatu</option>
+                <option value="VEF">VEF - Venezuelan BolÃ­var</option>
+                <option value="VND">VND - Vietnamese Dong</option>
+                <option value="YER">YER - Yemeni Rial</option>
+                <option value="ZMK">ZMK - Zambian Kwacha</option>
+              </select>
+            </div>
+          </div><br>
+
+          <div class="form-group row">
+            <label class="col-sm-2 col-form-label text-right" for="price">Price:</label>
+            <div class="col-sm-4">
+              <input type="number" id="price" step="1" required class="form-control" placeholder="Enter price" />
+            </div>
+          </div><br>
+
+          <div class="form-group row" hidden>
+            <label class="col-sm-2 col-form-label text-right" for="algo">Algorithm</label>
+            <div class="col-sm-4">
+              <select id="algo" class="form-select">
+                <option value="fuzz.ratio">fuzz.ratio</option>
+                <option value="fuzz.partial_ratio">fuzz.partial_ratio</option>
+                <option value="fuzz.token_sort_ratio">fuzz.token_sort_ratio</option>
+                <option value="fuzz.token_set_ratio" selected>
+                  fuzz.token_set_ratio
+                </option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group row" hidden>
+            <label class="col-sm-2 col-form-label text-right" for="threshold">Threshold</label>
+            <div class="col-sm-4">
+              <input class="form-control" type="number" id="threshold" min="50" max="100" value="85" />
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form> <br>
+
+        <p id="loadingMessage" style="display: none">
+          Please wait. Sending API request...
+        </p>
+
+        <div id="resultTable" style="display: none">
+          <h2>Search Results</h2>
+          <table style="border-collapse: collapse" id="results" class="table table-striped">
+            <thead>
+              <tr>
+                <th scope="col">Title</th>
+                <th scope="col">Price</th>
+                <th scope="col">Currency</th>
+                <th scope="col">UOM</th>
+                <th scope="col">Over/Under</th>
+                <th scope="col">Link</th>
+              </tr>
+            </thead>
+            <tbody id="resultBody">
+              <!-- Result rows will be dynamically added here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
-
-    <div hidden="true">
-      <label for="threshold">Threshold:</label>
-      <input type="number" id="threshold" min="50" max="100" value="85"><br>
-    </div>
-
-    <button type="submit">Submit</button>
-  </form>
-
-  <p id="loadingMessage" style="display: none;">Please wait. Sending API request...</p>
-
-  <div id="resultTable" style="display: none;">
-    <h2>Search Results</h2>
-    <table border='1' style='border-collapse:collapse' id="results">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th>Price</th>
-          <th>Currency</th>
-          <th>UOM</th>
-          <th>Over/Under</th>
-          <th>Link</th>
-        </tr>
-      </thead>
-      <tbody id="resultBody">
-        <!-- Result rows will be dynamically added here -->
-      </tbody>
-    </table>
   </div>
-
   <script>
-    
-    document.getElementById("apiForm").addEventListener("submit", function(event) {
-      event.preventDefault();
-      submitForm();
-    });
+    document
+      .getElementById("apiForm")
+      .addEventListener("submit", function (event) {
+        event.preventDefault();
+        submitForm();
+      });
 
     function submitForm() {
       // Disable the form while sending the API request
@@ -90,27 +291,27 @@
         currency: currency,
         price: price,
         algo: algo,
-        threshold: threshold
+        threshold: threshold,
       };
 
       // Send the API request
       fetch("http://127.0.0.1:8000/pvt/api/v3/search", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify(requestBody),
       })
-      .then(response => response.json())
-      .then(data => {
-        // Process the API response and display the results
-        displayResults(data);
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        // Display an error message
-        displayErrorMessage();
-      });
+        .then((response) => response.json())
+        .then((data) => {
+          // Process the API response and display the results
+          displayResults(data);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          // Display an error message
+          displayErrorMessage();
+        });
     }
 
     function disableForm() {
@@ -126,69 +327,70 @@
     }
 
     function displayResults(response) {
-  var results = response.output;
-  var resultBody = document.getElementById("resultBody");
-  resultBody.innerHTML = "";
+      var results = response.output;
+      var resultBody = document.getElementById("resultBody");
+      resultBody.innerHTML = "";
 
-  if (results.length > 0) {
-    // Display the result table
-    document.getElementById("resultTable").style.display = "block";
+      if (results.length > 0) {
+        // Display the result table
+        document.getElementById("resultTable").style.display = "block";
 
-    // Add result rows to the table
-    results.forEach(function(result) {
-      var row = document.createElement("tr");
+        // Add result rows to the table
+        results.forEach(function (result) {
+          var row = document.createElement("tr");
 
-      var titleCell = document.createElement("td");
-      titleCell.textContent = result.title;
-      row.appendChild(titleCell);
+          var titleCell = document.createElement("td");
+          titleCell.textContent = result.title;
+          row.appendChild(titleCell);
 
-      var priceCell = document.createElement("td");
-      priceCell.textContent = result.price;
-      row.appendChild(priceCell);
+          var priceCell = document.createElement("td");
+          priceCell.textContent = result.price;
+          row.appendChild(priceCell);
 
-      var currencyCell = document.createElement("td");
-      currencyCell.textContent = result.currency;
-      row.appendChild(currencyCell);
+          var currencyCell = document.createElement("td");
+          currencyCell.textContent = result.currency;
+          row.appendChild(currencyCell);
 
-      var uomCell = document.createElement("td");
-      uomCell.textContent = result.uom;
-      row.appendChild(uomCell);
+          var uomCell = document.createElement("td");
+          uomCell.textContent = result.uom;
+          row.appendChild(uomCell);
 
-      var overUnderCell = document.createElement("td");
-      overUnderCell.textContent = result["Over/Under"];
-      row.appendChild(overUnderCell);
+          var overUnderCell = document.createElement("td");
+          overUnderCell.textContent = result["Over/Under"];
+          row.appendChild(overUnderCell);
 
-      var linkCell = document.createElement("td");
-      var link = document.createElement("a");
-      link.href = result.link;
-      link.textContent = "Link";
-      linkCell.appendChild(link);
-      row.appendChild(linkCell);
+          var linkCell = document.createElement("td");
+          var link = document.createElement("a");
+          link.href = result.link;
+          link.textContent = "Link";
+          link.setAttribute('target', '_blank')
+          linkCell.appendChild(link);
+          row.appendChild(linkCell);
 
-      resultBody.appendChild(row);
-    });
-  } else {
-    // Display "No matches found" message
-    var noMatchesRow = document.createElement("tr");
-    var noMatchesCell = document.createElement("td");
-    noMatchesCell.setAttribute("colspan", "6");
-    noMatchesCell.textContent = "No matches found";
-    noMatchesRow.appendChild(noMatchesCell);
-    resultBody.appendChild(noMatchesRow);
+          resultBody.appendChild(row);
+        });
+      } else {
+        // Display "No matches found" message
+        var noMatchesRow = document.createElement("tr");
+        var noMatchesCell = document.createElement("td");
+        noMatchesCell.setAttribute("colspan", "6");
+        noMatchesCell.textContent = "No matches found";
+        noMatchesRow.appendChild(noMatchesCell);
+        resultBody.appendChild(noMatchesRow);
 
-    // Hide the result table
-    document.getElementById("resultTable").style.display = "none";
-  }
+        // Hide the result table
+        document.getElementById("resultTable").style.display = "none";
+      }
 
-  // Re-enable the form
-  enableForm();
-}
-
+      // Re-enable the form
+      enableForm();
+    }
 
     function displayErrorMessage() {
       // Display error message
       var errorMessage = document.createElement("p");
-      errorMessage.textContent = "An error occurred while processing the request.";
+      errorMessage.textContent =
+        "An error occurred while processing the request.";
       document.body.appendChild(errorMessage);
 
       // Re-enable the form
@@ -207,4 +409,5 @@
     }
   </script>
 </body>
+
 </html>
