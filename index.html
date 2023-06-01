@@ -233,7 +233,7 @@
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary">Search</button>
         </form> <br>
 
         <p id="loadingMessage" style="display: none">
@@ -295,7 +295,7 @@
       };
 
       // Send the API request
-      fetch("http://127.0.0.1:8000/pvt/api/v3/search", {
+      fetch("http://172.17.41.147:8000/pvt/api/v3/search", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

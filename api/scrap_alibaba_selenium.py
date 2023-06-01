@@ -6,6 +6,8 @@ import requests
 import urllib.parse
 import re
 from decimal import Decimal
+import locale
+locale.setlocale(locale.LC_ALL, '')
 
 LIMIT = 20
 options = Options()
@@ -32,7 +34,8 @@ def clean_price_uom(price_html):
         price = price_html.find_all('div', class_='price-item')[0].find('div', class_='price').text.strip()
         uom = price_html.find_all('div', class_='price-item')[0].find('div', class_='quality').text.strip()
 
-        price = float(re.sub(r'[^(\d.)]', '', price))
+        # price = float(Decimal(re.sub(r'[^(\d.)]', '', price)))
+        price = locale.atof(re.search(r'\$([\d,]+\.\d+)', price).group(1))
         uom = re.sub(r'[\d\W_]+', '', uom)
         return price, uom
     except Exception as e:
@@ -43,13 +46,14 @@ def clean_price_uom(price_html):
         price = price_html.find('div', class_='price-range').find('span', class_='price').text.strip()
         uom = price_html.find('div', class_='price-range').find('span', class_='unit').text.strip()
 
-        price = float(Decimal(re.search(r'\$(\d+\.\d+)', price).group(1)))
+        # price = float(Decimal(re.search(r'\$(\d+\.\d+)', price).group(1)))
+        price = locale.atof(re.search(r'\$([\d,]+\.\d+)', price).group(1))
         uom = re.sub(r'[\d\W_]+', '', uom)
         return price, uom
     except Exception as e:
         print(e)
     
-    return None, None
+    return 0, 0
 
 def scrap(keyword):
     keyword = urllib.parse.quote(keyword)
@@ -88,3 +92,4 @@ def scrap(keyword):
 # clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">50 - 299 pieces</div><div class="price"><span class="promotion">$18.90</span></div></div><div class="price-item"><div class="quality">300 - 499 pieces</div><div class="price"><span class="">$16.90</span></div></div><div class="price-item"><div class="quality">&gt;= 500 pieces</div><div class="price"><span class="">$12.90</span></div></div></div></div>')
 # clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-range"><span class="price">$0.24 - $0.80</span><span class="unit">/ piece |</span><span class="moq">200 piece/pieces</span><span class="name">(Min. order)</span></div></div></div>')
 # clean_price_uom('<div class="product-price" data-auto-exp="module_price"><div class="price-list"><div class="price-item"><div class="quality">1 - 4 sets</div><div class="price"><span class="promotion">$14,500.00</span></div></div><div class="price-item"><div class="quality">5 - 9 sets</div><div class="price"><span class="">$14,000.00</span></div></div><div class="price-item"><div class="quality">10 - 99 sets</div><div class="price"><span class="">$13,700.00</span></div></div><div class="price-item"><div class="quality">&gt;= 100 sets</div><div class="price"><span class="">$6,800.00</span></div></div></div></div>')
+# clean_price_uom('<div class="product-price" data-auto-exp="module_price" data-aplus-clk="x5_18b208be" data-spm-anchor-id="a2700.details.0.i5.566a10a2jPDHWD" data-aplus-ae=""><div class="price-list"><div class="price-range"><span class="price" data-spm-anchor-id="a2700.details.0.i24.566a10a2jPDHWD">$100,000.00 - $200,000.00</span><span class="unit">/ unit |</span><span class="moq">1 unit/units</span><span class="name">(Min. order)</span></div></div></div>')
