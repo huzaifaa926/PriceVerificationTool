@@ -5,11 +5,13 @@ from bs4 import BeautifulSoup
 import requests
 import urllib.parse
 import re
-from decimal import Decimal
+from config import *
+# from decimal import Decimal
 import locale
 locale.setlocale(locale.LC_ALL, '')
 
-LIMIT = 20
+logging.basicConfig(filename='../logs/app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s', datefmt='%d %b, %Y %H:%M:%S', level=LOG_LEVEL)
+
 options = Options()
 options.add_argument("--headless")
 
@@ -23,7 +25,8 @@ def clean_title(title):
     try:
         title = title.text.strip()
     except Exception as e:
-        print(e)
+        logging.error(f"{'-'*10} In clean_title function {'-'*10}")
+        logging.error(e)
         title = None
     return title
 
@@ -39,7 +42,8 @@ def clean_price_uom(price_html):
         uom = re.sub(r'[\d\W_]+', '', uom)
         return price, uom
     except Exception as e:
-        print(e)
+        logging.error(f"{'-'*10} In clean_price_uom function 1st exception {'-'*10}")
+        logging.error(e)
 
     # Handles cases where there is a price range available for a product
     try:
@@ -51,11 +55,14 @@ def clean_price_uom(price_html):
         uom = re.sub(r'[\d\W_]+', '', uom)
         return price, uom
     except Exception as e:
-        print(e)
+        logging.error(f"{'-'*10} In clean_price_uom function 2nd exception {'-'*10}")
+        logging.error(e)
     
     return 0, 0
 
 def scrap(keyword):
+    logging.info("-"*50)
+    logging.info(f"Scrapping for {keyword}")
     keyword = urllib.parse.quote(keyword)
     driver = webdriver.Chrome(options=options)
     driver.get(f"https://www.alibaba.com/trade/search?fsb=y&IndexArea=product_en&CatId=&SearchText={keyword}&viewtype=G&page=1")
@@ -76,7 +83,7 @@ def scrap(keyword):
             title = soup.find('div', {'class':'product-title'})
             price_html = soup.find('div', {'class':'product-price'})
             
-            print(link)
+            logging.info(f"{keyword} : {link}")
             temp['title'] = clean_title(title)
             temp['price'], temp['uom'] = clean_price_uom(price_html)
             temp['link'] = link
