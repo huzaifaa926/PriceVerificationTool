@@ -18,7 +18,13 @@ options.add_argument("--headless")
 def normalize_url(url):
     if url.startswith('//'):
         url = url[2:]
-    return url.lstrip('/')
+    elif url.startswith('/'):
+        url = url[1:]
+
+    if not url.startswith('https://'):
+        url = 'https://' + url
+
+    return url
 
 
 def clean_title(title):
@@ -76,7 +82,7 @@ def scrap(keyword):
         temp = {}
         if product.find('h2'):
             link = product.find('h2').find('a')['href']
-            link = 'https://' + normalize_url(link)
+            link = normalize_url(link)
             headers = {'User-Agent':'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36'}
             response=requests.get(link, headers=headers)
             soup=BeautifulSoup(response.text,'lxml')
